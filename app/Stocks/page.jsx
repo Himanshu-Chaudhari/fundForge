@@ -58,12 +58,18 @@ const Stocks = () => {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      let data = await response.json();
-      setStocks(data);
+
+      if (response.ok) {
+        let data = await response.json();
+        console.log(data)
+        setStocks(data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+
 
   const deleteHandler = async (item) => {
     try {
@@ -86,76 +92,86 @@ const Stocks = () => {
   }, [session]);
 
   return (
-    <div className="mt-40 md:mt-32 lg:mt-28 w-full h-screen">
-      <div className=" md:items-center md:justify-center">
-        <div className=" md:mr-8">
-          <div className="pb-8">
-            <h1 className="text-4xl text-blue-500 text-center md:mb-10 font-semibold pb-2">
-              Add Stock
-            </h1>
-            <form className="md:flex md:flex-wrap md:items-center md:mx-40">
-              <div className="md:w-1/2 mb-4  pr-0 md:pr-5 ">
-                <input
-                  type="text"
-                  value={stockForm?.companyName || ""}
-                  name="companyName"
-                  placeholder="Stock Name"
-                  className="border-blue-500 border-2 w-full px-4 py-2 rounded"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="md:w-1/2 mb-4  pl-0 md:pl-5">
-                <input
-                  type="text"
-                  value={stockForm?.symbol || ""}
-                  name="symbol"
-                  placeholder="Stock Symbol"
-                  className="border-blue-500 border-2 w-full px-4 py-2 rounded"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="md:w-1/2 mb-4 md:mb-0 pr-0 md:pr-5">
-                <input
-                  type="number"
-                  value={stockForm?.quantity || ""}
-                  name="quantity"
-                  placeholder="Quantity"
-                  className="border-blue-500 border-2 w-full px-4 py-2 rounded"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="md:w-1/2 mb-4 md:mb-0 pl-0 md:pl-5">
-                <input
-                  type="number"
-                  value={stockForm?.purchasePrice || ""}
-                  name="purchasePrice"
-                  placeholder="Purchase Price"
-                  className="border-blue-500 border-2 w-full px-4 py-2 rounded"
-                  onChange={handleChange}
-                />
-              </div>
-              <button
-                onClick={addStock}
-                className="bg-blue-500 opacity-90 text-white rounded-md w-full md:mt-4 md:w-full px-4 py-2 font-semibold"
-              >
-                Add
-              </button>
-            </form>
+    <div>
+      {session ? (<div className="mt-40 md:mt-32 lg:mt-28 w-full h-screen">
+        <div className=" md:items-center md:justify-center">
+          <div className=" md:mr-8">
+            <div className="pb-8">
+              <h1 className="text-4xl text-blue-500 text-center md:mb-10 font-semibold pb-2">
+                Add Stock
+              </h1>
+              <form className="md:flex md:flex-wrap md:items-center md:mx-40">
+                <div className="md:w-1/2 mb-4  pr-0 md:pr-5 ">
+                  <input
+                    type="text"
+                    value={stockForm?.companyName || ""}
+                    name="companyName"
+                    placeholder="Stock Name"
+                    className="border-blue-500 border-2 w-full px-4 py-2 rounded"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="md:w-1/2 mb-4  pl-0 md:pl-5">
+                  <input
+                    type="text"
+                    value={stockForm?.symbol || ""}
+                    name="symbol"
+                    placeholder="Stock Symbol"
+                    className="border-blue-500 border-2 w-full px-4 py-2 rounded"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="md:w-1/2 mb-4 md:mb-0 pr-0 md:pr-5">
+                  <input
+                    type="number"
+                    value={stockForm?.quantity || ""}
+                    name="quantity"
+                    placeholder="Quantity"
+                    className="border-blue-500 border-2 w-full px-4 py-2 rounded"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="md:w-1/2 mb-4 md:mb-0 pl-0 md:pl-5">
+                  <input
+                    type="number"
+                    value={stockForm?.purchasePrice || ""}
+                    name="purchasePrice"
+                    placeholder="Purchase Price"
+                    className="border-blue-500 border-2 w-full px-4 py-2 rounded"
+                    onChange={handleChange}
+                  />
+                </div>
+                <button
+                  onClick={addStock}
+                  className="bg-blue-500 opacity-90 text-white rounded-md w-full md:mt-4 md:w-full px-4 py-2 font-semibold"
+                >
+                  Add
+                </button>
+              </form>
+            </div>
+          </div>
+          <div className="md:mt-0 mt-8 md:mx-32 ">
+            <div className="md:ml-8">
+              <h1 className="text-4xl text-blue-500 text-center font-semibold pb-8">
+                Your stocks
+              </h1>
+              <Table
+                deleteHandler={deleteHandler}
+                data={stocks}
+                names={heading}
+              />
+
+            </div>
           </div>
         </div>
-        <div className="md:mt-0 mt-8 md:mx-32 ">
-          <div className="md:ml-8">
-            <h1 className="text-4xl text-blue-500 text-center font-semibold pb-8">
-              Your stocks
-            </h1>
-            <Table
-              deleteHandler={deleteHandler}
-              data={stocks}
-              names={heading}
-            />
-          </div>
+      </div>) : (
+        <div className="px-4">
+          <h1 className="mt-32 font-satoshsi text-xl md:text-2xl text-blue-400">
+            Sign-in to see your portfolio...
+          </h1>
         </div>
-      </div>
+      )}
+
     </div>
   );
 };

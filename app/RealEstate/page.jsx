@@ -32,14 +32,14 @@ const RealEstate = () => {
   // Adding real estate
   const addrealEstate = async (e) => {
     e.preventDefault();
-
+    if(!realEstateForm.propertyType || !realEstateForm.purchasePrice || !realEstateForm.propertyId){
+      alert("Please enter proper inputs")
+    }
     try {
       const response = await fetch("/api/realEstate/new", {
         method: "POST",
         body: JSON.stringify({
           propertyType: realEstateForm.propertyType,
-          address: realEstateForm.address,
-          squareFootage: realEstateForm.squareFootage,
           purchasePrice: realEstateForm.purchasePrice,
           propertyId: realEstateForm.propertyId,
           userId: session?.user.id,
@@ -50,8 +50,6 @@ const RealEstate = () => {
           ...realEstate,
           {
             propertyType: realEstateForm.propertyType,
-            address: realEstateForm.address,
-            squareFootage: realEstateForm.squareFootage,
             purchasePrice: realEstateForm.purchasePrice,
             propertyId: realEstateForm.propertyId,
             user: session?.user.id,
@@ -134,27 +132,11 @@ const RealEstate = () => {
                       onChange={handleChange}
                     />
                     <input
-                      type="text"
-                      value={realEstateForm.address || ""}
-                      name="address"
-                      placeholder="Address"
-                      className="border-blue-500 border-2 w-[360px] my-2  px-2 py-2 rounded"
-                      onChange={handleChange}
-                    />
-                    <input
                       type="number"
                       value={realEstateForm.purchasePrice || ""}
                       name="purchasePrice"
                       placeholder="Purchase Price"
                       className="border-blue-500 border-2 w-[360px] my-2 px-2 py-2 rounded"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="number"
-                      value={realEstateForm.squareFootage || ""}
-                      name="squareFootage"
-                      placeholder="Area"
-                      className="border-blue-500 border-2 my-2 w-[360px] px-2 py-2 rounded"
                       onChange={handleChange}
                     />
                     <input

@@ -100,7 +100,7 @@ const Home = () => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
-      let totalPrice = data.reduce((acc, item) => acc + item.purchasePrice, 0);
+      let totalPrice = data.reduce((acc, item) => acc + item.purchasePrice * item.quantity, 0);
       setChartData((prevData) => ({
         ...prevData,
         stock: totalPrice,
@@ -115,7 +115,7 @@ const Home = () => {
       fetchfdData();
       fetchRealEstateData();
       fetchStockData();
-      fetchgoldData();
+      fetchgoldData();   
     }
   }, [session]);
 
@@ -131,6 +131,7 @@ const Home = () => {
       position: "bottom",
     },
   };
+
 
   return (
     <div className="mt-40 md:mt-32 lg:mt-28 w-full h-screen">

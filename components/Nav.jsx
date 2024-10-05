@@ -51,7 +51,6 @@ const Nav = () => {
 
   return (
     <nav className="fixed grid mx-auto border border-[#88acd7] top-0 left-0 right-0 z-10 bg-white bg-opacity-90">
-      {/* Desktop Navigation */}
       <div className="relative container lg:py-6 mx-auto px-4 py-2 hidden md:flex md:items-center md:justify-between">
         <Link
           className="flex items-center font-bold text-3xl text-center md:text-left px-4 mr-12 text-blue-500"
@@ -73,7 +72,7 @@ const Nav = () => {
             ))}
           </div>
         ) : (
-          <div className="absolute top-12 right-5">
+          <div>
             {!showProvidersDropdown ? (
               <button
                 type="button"
@@ -83,7 +82,7 @@ const Nav = () => {
                 Sign in
               </button>
             ) : (
-              <div className="flex">
+              <div className="">
                 <button
                   type="button"
                   onClick={() => setShowProvidersDropdown(false)}
@@ -131,7 +130,7 @@ const Nav = () => {
 
       {/* Mobile Navigation */}
       <div className="md:hidden">
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-between">
           <Link
             className="font-bold text-4xl py-10 px-4 mr-12 text-blue-500"
             href="/"
@@ -143,35 +142,35 @@ const Nav = () => {
               {!navbarOpen ? (
                 <button
                   onClick={() => setnavbarOpen(true)}
-                  className="flex items-center px-3 py-2 border rounded border-blue-500 text-blue-500 hover:text-white hover:border-white"
+                  className="flex items-center px-3 py-2 border rounded border-blue-500 text-blue-500 "
                 >
                   <HamBuger />
                 </button>
               ) : (
                 <button
                   onClick={() => setnavbarOpen(false)}
-                  className="flex items-center px-3 py-2 border rounded border-blue-500 text-blue-500 hover:text-white hover:border-white"
+                  className="flex items-center px-3 py-2 border rounded border-blue-500 text-blue-500"
                 >
                   <Xmark />
                 </button>
               )}
             </div>
           ) : (
-            <div className="absolute top-12 right-5">
+            <div className="">
               {!showProvidersDropdown ? (
                 <button
                   type="button"
                   onClick={handleSignInButtonClick}
-                  className="blue_btn"
+                  className="blue_btn m-9"
                 >
                   Sign in
                 </button>
               ) : (
-                <div className="flex">
+                <div className="">
                   <button
                     type="button"
                     onClick={() => setShowProvidersDropdown(false)}
-                    className="blue_btn"
+                    className="blue_btn m-9"
                   >
                     Cancel
                   </button>

@@ -4,6 +4,18 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+function isValidHUID(huid) {
+  const regex = /^[A-Z]\d{5}$/;
+  console.log(typeof (huid))
+  console.log(regex.test(huid))
+  return regex.test(huid);
+}
+
+function isValidCarat(carat) {
+  const regex2 = /^(8|9|10|12|14|18|22|24)$/;
+  return regex2.test(carat);
+}
+
 const Gold = () => {
   const { data: session } = useSession();
   const [gold, setGold] = useState(0);
@@ -39,6 +51,14 @@ const Gold = () => {
 
   const addGold = async (e) => {
     e.preventDefault();
+    if (!isValidHUID(goldForm.huid)) {
+      alert("Enter a valid HUID number!!")
+      return
+    }
+    if (!isValidCarat(goldForm.type)) {
+      alert("Enter a valid gold type!!")
+      return
+    }
     try {
       const response = await fetch(`/api/gold/new`, {
         method: "POST",
@@ -133,115 +153,126 @@ const Gold = () => {
   };
 
   return (
-    <div className="mt-40 md:mt-32 lg:mt-28 w-full h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="order-1 ">
-          <div
-            className="card w-[370px] md:h-[508px] md:w-[508px] shadow"
-            id="gold"
-          >
-            <h1 className="font-bold md:text-center text-yellow-500 text-4xl mx-2 py-2 ">
-              Gold
-            </h1>
-            <p className="md:text-center md:mt-8">
-              <span
-                className={`font-semibold mx-2 my-8 tracking-tight text-4xl ${
-                  calculatePercentageChange(+gold * +livePrice, gold, price) < 0
-                    ? "text-red-500"
-                    : "text-green-500"
-                }`}
-              >
-                {calculatePercentageChange(gold * livePrice, gold, price)} %
-              </span>
-            </p>
+    <div>
+      {session ? (<div className="mt-40 md:mt-32 lg:mt-28 w-full h-screen">
+        <div className="grid grid-cols-1 md:grid-cols-2">
 
-            <p className="text-lg md:text-center md:my-4 text-slate-700 font-semibold py-3">
-              Gold Owned:{" "}
-              <span className="text-xl text-blue-500 font-semibold">
-                {gold} gm
-              </span>
-            </p>
-            <p className="text-lg md:text-center md:my-4 text-slate-700 font-semibold py-3">
-              Market Price:{" "}
-              <span className="text-xl text-blue-500 font-semibold">
-                {+gold * +livePrice}
-              </span>
-            </p>
-            <p className="text-xl md:text-center md:my-4 text-slate-700 font-semibold py-3">
-              Purchase Price:{" "}
-              <span className="text-xl text-blue-500 font-semibold">
-                {price}
-              </span>
-            </p>
+
+          <div className="order-1 ">
+            <div
+              className="card w-[370px] md:h-[508px] md:w-[508px] shadow"
+              id="gold"
+            >
+              <h1 className="font-bold md:text-center text-yellow-500 text-4xl mx-2 py-2 ">
+                Gold
+              </h1>
+              <p className="md:text-center md:mt-8">
+                <span
+                  className={`font-semibold mx-2 my-8 tracking-tight text-4xl ${calculatePercentageChange(gold *
+                    livePrice, gold, price) < 0
+                      ? "text-red-500"
+                      : "text-green-500"
+                    }`}
+                >
+                  {calculatePercentageChange(gold * livePrice, gold, price)} %
+                </span>
+              </p>
+
+              <p className="text-lg md:text-center md:my-4 text-slate-700 font-semibold py-3">
+                Gold Owned:{" "}
+                <span className="text-xl text-blue-500 font-semibold">
+                  {gold} gm
+                </span>
+              </p>
+              <p className="text-lg md:text-center md:my-4 text-slate-700 font-semibold py-3">
+                Market Value:{" "}
+                <span className="text-xl text-blue-500 font-semibold">
+                  {+gold * +livePrice}
+                </span>
+              </p>
+              <p className="text-xl md:text-center md:my-4 text-slate-700 font-semibold py-3">
+                Total Invested:{" "}
+                <span className="text-xl text-blue-500 font-semibold">
+                  {price}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="order-2 my-4" id="input">
+            <h1 className="text-4xl font-semibold text-blue-500 mx-1">
+              Add Gold
+            </h1>
+            <form className="my-6 ">
+              <input
+                type="text"
+                value={goldForm.huid || ""}
+                name="huid"
+                placeholder="HUID Number"
+                className="border-blue-500 w-[370px] md:w-[250px] border-2 md:mx-1 my-2  py-2 rounded"
+                onChange={handleChange}
+              />
+              <input
+                type="number"
+                value={goldForm.weight || ""}
+                name="weight"
+                placeholder="Weight in gm"
+                className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
+                onChange={handleChange}
+              />
+              <input
+                type="number"
+                value={goldForm.purchasePrice || ""}
+                name="purchasePrice"
+                placeholder="Purchase Price"
+                className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
+                onChange={handleChange}
+              />
+              <input
+                type="number"
+                value={goldForm.type || ""}
+                name="type"
+                placeholder="Carat"
+                className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
+                onChange={handleChange}
+              />
+              <button
+                onClick={addGold}
+                className="w-[370px] md:w-[508px] md:mx-1 bg-blue-500 opacity-90 text-white rounded my-2 px-4 py-2 font-semibold"
+              >
+                Add
+              </button>
+            </form>
+            <h1 className="text-4xl mb-6 font-semibold text-blue-500 md:mx-1 py-2">
+              Delete Gold
+            </h1>
+            <form className="md:mx-1 py-2">
+              <input
+                type="text"
+                value={deletegoldForm.huid || ""}
+                name="huid"
+                placeholder="HUID Number"
+                className="w-[370px] md:w-[508px] border-blue-500 border-2  py-2 rounded"
+                onChange={deletehandleChange}
+              />
+              <br />
+              <button
+                onClick={deleteGold}
+                className="w-[370px] md:w-[508px] bg-blue-500 opacity-90 text-white rounded mt-4 mb-8 py-2 font-semibold"
+              >
+                Delete
+              </button>
+            </form>
           </div>
         </div>
-        <div className="order-2 my-4" id="input">
-          <h1 className="text-4xl font-semibold text-blue-500 mx-1">
-            Add Gold
-          </h1>
-          <form className="my-6 ">
-            <input
-              type="text"
-              value={goldForm.huid || ""}
-              name="huid"
-              placeholder="HUID Number"
-              className="border-blue-500 w-[370px] md:w-[250px] border-2 md:mx-1 my-2  py-2 rounded"
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              value={goldForm.weight || ""}
-              name="weight"
-              placeholder="Weight in gm"
-              className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              value={goldForm.purchasePrice || ""}
-              name="purchasePrice"
-              placeholder="Purchase Price"
-              className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              value={goldForm.type || ""}
-              name="type"
-              placeholder="Purity"
-              className="border-blue-500 border-2 w-[370px] md:w-[250px] md:mx-1 my-2  py-2 rounded"
-              onChange={handleChange}
-            />
-            <button
-              onClick={addGold}
-              className="w-[370px] md:w-[508px] md:mx-1 bg-blue-500 opacity-90 text-white rounded my-2 px-4 py-2 font-semibold"
-            >
-              Add
-            </button>
-          </form>
-          <h1 className="text-4xl mb-6 font-semibold text-blue-500 md:mx-1 py-2">
-            Delete Gold
-          </h1>
-          <form className="md:mx-1 py-2">
-            <input
-              type="text"
-              value={deletegoldForm.huid || ""}
-              name="huid"
-              placeholder="HUID Number"
-              className="w-[370px] md:w-[508px] border-blue-500 border-2  py-2 rounded"
-              onChange={deletehandleChange}
-            />
-            <br />
-            <button
-              onClick={deleteGold}
-              className="w-[370px] md:w-[508px] bg-blue-500 opacity-90 text-white rounded mt-4 mb-8 py-2 font-semibold"
-            >
-              Delete
-            </button>
-          </form>
-        </div>
+      </div>) : (<div>
+        <h1 className="mt-32 font-satoshsi text-2xl text-blue-400">
+          Sign-in to see your portfolio...
+        </h1>
       </div>
+      )}
+
     </div>
+
   );
 };
 

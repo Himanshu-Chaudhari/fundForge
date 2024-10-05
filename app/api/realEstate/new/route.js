@@ -4,8 +4,6 @@ import { connectToDB } from "@utils/database";
 export const POST = async (req, res) => {
   const {
     propertyType,
-    address,
-    squareFootage,
     purchasePrice,
     propertyId,
     userId,
@@ -15,8 +13,6 @@ export const POST = async (req, res) => {
     connectToDB();
     const newRealEstate = new RealEstate({
       propertyType,
-      address,
-      squareFootage,
       purchasePrice,
       propertyId,
       user: userId,
