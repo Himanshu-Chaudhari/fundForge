@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 let renderTableRow = ({ data, deleteHandler }) => {
   return (
-    <div>
+    <>
       {data.map((item) => (
         <tr
           key={item._id}
@@ -31,7 +31,7 @@ let renderTableRow = ({ data, deleteHandler }) => {
           </td>
         </tr>
       ))}
-    </div>
+    </>
   );
 };
 
@@ -72,7 +72,7 @@ const Table = ({ data, deleteHandler, names }) => {
                 return x + y.quantity;
               }, 0))}</td>
           <td className="px-1 md:px-6 py-2">{JSON.stringify(data.reduce(function (x, y) {
-                return x + y.purchasePrice * y.quantity;
+                return x.purchasePrice * x.quantity + y.purchasePrice * y.quantity;
               }, 0))
           }</td>
           <th scope="col" className="px-1 md:px-8  py-2"></th>

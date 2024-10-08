@@ -47,6 +47,7 @@ const handler = NextAuth({
         return false;
       }
     },
+    secret: process.env.NEXTAUTH_SECRET,
   },
 });
 
